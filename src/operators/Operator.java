@@ -6,6 +6,7 @@ import java.util.Map;
 import data.Dynamic_properties;
 import data.Tuple;
 import net.sf.jsqlparser.expression.Expression;
+import util.GlobalLogger;
 import util.TupleWriter;
 import visitors.BasicExpressionVisitor;
 /**
@@ -164,7 +165,7 @@ public abstract class Operator {
 				break;
 			}	
 		}
-		System.out.println("finish dumping");
+		GlobalLogger.getLogger().info("finish dumping");
 		reset();
 	}
 	

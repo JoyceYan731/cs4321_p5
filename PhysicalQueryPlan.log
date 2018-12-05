@@ -2,20 +2,142 @@
 
  
 DupElim 
+--Project[S.A,R.G] 
+---SMJ[S.B = R.G AND S.A = B.D] 
+----ExternalSort[R.G,B.D] 
+-----BNLJ[R.H <> B.D] 
+------Select[R.H <= 99]
+-------TableScan[Reserves] 
+------TableScan[Boats] 
+----ExternalSort[S.B,S.A] 
+-----TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
 --Project[*] 
----Select[S.A <= 9]
+---TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[Sailors.A] 
+---TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[Boats.F,Boats.D] 
+---TableScan[Boats] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[Reserves.G,Reserves.H] 
+---TableScan[Reserves] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[*] 
+---Select[Sailors.B >= Sailors.C]
+----TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[Sailors.A] 
+---Select[Sailors.B >= Sailors.C]
+----TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[Sailors.A] 
+---Select[Sailors.B >= Sailors.C,Sailors.B < Sailors.C]
 ----TableScan[Sailors] 
 **************************************Physical Plan************************************************ 
 
  
 DupElim 
 --Project[*] 
----Select[B.D <= 9]
-----TableScan[Boats] 
+---SMJ[Sailors.A = Reserves.G] 
+----ExternalSort[Reserves.G] 
+-----TableScan[Reserves] 
+----ExternalSort[Sailors.A] 
+-----TableScan[Sailors] 
 **************************************Physical Plan************************************************ 
 
  
 DupElim 
 --Project[*] 
----Select[R.G <= 9]
-----TableScan[Reserves] 
+---SMJ[Sailors.A = Reserves.G] 
+----ExternalSort[Reserves.G] 
+-----SMJ[Reserves.H = Boats.D] 
+------ExternalSort[Reserves.H] 
+-------TableScan[Reserves] 
+------ExternalSort[Boats.D] 
+-------TableScan[Boats] 
+----ExternalSort[Sailors.A] 
+-----TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[*] 
+---SMJ[Sailors.A = Reserves.G AND Reserves.H = Boats.D] 
+----ExternalSort[Sailors.A,Boats.D] 
+-----BNLJ 
+------Select[Sailors.B <= 149]
+-------TableScan[Sailors] 
+------TableScan[Boats] 
+----ExternalSort[Reserves.G,Reserves.H] 
+-----TableScan[Reserves] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[*] 
+---TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[*] 
+---BNLJ[S1.A < S2.A] 
+----TableScan[Sailors] 
+----TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[B.F,B.D] 
+---TableScan[Boats] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[*] 
+---SMJ[S.A = R.G] 
+----ExternalSort[R.G] 
+-----SMJ[R.H = B.D] 
+------ExternalSort[R.H] 
+-------TableScan[Reserves] 
+------ExternalSort[B.D] 
+-------TableScan[Boats] 
+----ExternalSort[S.A] 
+-----TableScan[Sailors] 
+**************************************Physical Plan************************************************ 
+
+ 
+DupElim 
+--Project[*] 
+---SMJ[S.A = R.G] 
+----ExternalSort[R.G] 
+-----SMJ[R.H = B.D] 
+------ExternalSort[R.H] 
+-------TableScan[Reserves] 
+------ExternalSort[B.D] 
+-------TableScan[Boats] 
+----ExternalSort[S.A] 
+-----TableScan[Sailors] 

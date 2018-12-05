@@ -71,7 +71,8 @@ public class ProjectOperator extends Operator{
 		this.aliasOrder = new HashMap<String, Integer>();
 		if (selectItems.get(0).toString() == "*") {
 			allColumns = true;
-			this.schema = op.schema;
+			this.schema = op.schema; // in projectOperator, the schema of the operator is consistent with its join operator.
+			// but the schema of its output tuples are the same with the ps statement.
 		}else {
 			Map<String, Integer> map = new HashMap<String, Integer>();
 			for (int i = 0; i < selectItems.size(); i++) {
@@ -134,7 +135,7 @@ public class ProjectOperator extends Operator{
 		Collections.sort(attributes, new ColumnComparator());
 		long[] newData = new long[currSchema.size()];
 		for (int i = 0; i < attributes.size(); i++) {
-			newData[i] = currSchema.get(attributes.get(i));
+			newData[i] = currTp.getData()[currSchema.get(attributes.get(i))];
 			currSchema.put(attributes.get(i), i);
 		}
 		
@@ -155,10 +156,12 @@ public class ProjectOperator extends Operator{
 		@Override 
 		public int compare(String s1, String s2) {
 			String[] s1List = s1.split("\\.");
-			s1 = s1List[0];
 			String[] s2List = s2.split("\\.");
-			s2 = s2List[0];
-			return aliasOrder.get(s1) - aliasOrder.get(s2);
+			if (aliasOrder.get(s1List[0]) != aliasOrder.get(s2List[0])) {
+				return aliasOrder.get(s1List[0]) - aliasOrder.get(s2List[0]);
+			} else {
+				return schema.get(s1) - schema.get(s2);
+			}
 		}
 	}
 	
