@@ -3,158 +3,148 @@
 
  
 Query: NO. 1 
-TIME START 1543963552174 
-Read statement: SELECT DISTINCT S.A, R.G FROM Sailors AS S, Reserves AS R, Boats AS B WHERE S.B = R.G AND S.A = B.D AND R.H <> B.D AND R.H < 100 ORDER BY S.A 
+TIME START 1544065799840 
+Read statement: SELECT * FROM Sailors 
 finish dumping 
 end 
-time spent： 10178ms 
+time spent： 659ms 
 
  
 
  
 Query: NO. 2 
-TIME START 1543963562376 
-Read statement: SELECT * FROM Sailors 
+TIME START 1544065800511 
+Read statement: SELECT Sailors.A FROM Sailors 
 finish dumping 
 end 
-time spent： 71ms 
+time spent： 41ms 
 
  
 
  
 Query: NO. 3 
-TIME START 1543963562456 
-Read statement: SELECT Sailors.A FROM Sailors 
+TIME START 1544065800557 
+Read statement: SELECT Boats.F, Boats.D FROM Boats 
 finish dumping 
 end 
-time spent： 50ms 
+time spent： 37ms 
 
  
 
  
 Query: NO. 4 
-TIME START 1543963562661 
-Read statement: SELECT Boats.F, Boats.D FROM Boats 
+TIME START 1544065800618 
+Read statement: SELECT Reserves.G, Reserves.H FROM Reserves 
 finish dumping 
 end 
-time spent： 36ms 
+time spent： 39ms 
 
  
 
  
 Query: NO. 5 
-TIME START 1543963562701 
-Read statement: SELECT Reserves.G, Reserves.H FROM Reserves 
+TIME START 1544065800670 
+Read statement: SELECT * FROM Sailors WHERE Sailors.B >= Sailors.C 
 finish dumping 
 end 
-time spent： 32ms 
+time spent： 64ms 
 
  
 
  
 Query: NO. 6 
-TIME START 1543963562739 
-Read statement: SELECT * FROM Sailors WHERE Sailors.B >= Sailors.C 
+TIME START 1544065800743 
+Read statement: SELECT Sailors.A FROM Sailors WHERE Sailors.B >= Sailors.C 
 finish dumping 
 end 
-time spent： 60ms 
+time spent： 62ms 
 
  
 
  
 Query: NO. 7 
-TIME START 1543963562805 
-Read statement: SELECT Sailors.A FROM Sailors WHERE Sailors.B >= Sailors.C 
+TIME START 1544065800815 
+Read statement: SELECT Sailors.A FROM Sailors WHERE Sailors.B >= Sailors.C AND Sailors.B < Sailors.C 
 finish dumping 
 end 
-time spent： 17ms 
+time spent： 133ms 
 
  
 
  
 Query: NO. 8 
-TIME START 1543963562863 
-Read statement: SELECT Sailors.A FROM Sailors WHERE Sailors.B >= Sailors.C AND Sailors.B < Sailors.C 
+TIME START 1544065800952 
+Read statement: SELECT * FROM Sailors, Reserves WHERE Sailors.A = Reserves.G 
 finish dumping 
 end 
-time spent： 18ms 
+time spent： 346ms 
 
  
 
  
 Query: NO. 9 
-TIME START 1543963562884 
-Read statement: SELECT * FROM Sailors, Reserves WHERE Sailors.A = Reserves.G 
+TIME START 1544065801322 
+Read statement: SELECT * FROM Sailors, Reserves, Boats WHERE Sailors.A = Reserves.G AND Reserves.H = Boats.D 
 finish dumping 
 end 
-time spent： 209ms 
+time spent： 1722ms 
 
  
 
  
 Query: NO. 10 
-TIME START 1543963563102 
-Read statement: SELECT * FROM Sailors, Reserves, Boats WHERE Sailors.A = Reserves.G AND Reserves.H = Boats.D 
+TIME START 1544065803289 
+Read statement: SELECT * FROM Sailors, Reserves, Boats WHERE Sailors.A = Reserves.G AND Reserves.H = Boats.D AND Sailors.B < 150 
 finish dumping 
 end 
-time spent： 1366ms 
+time spent： 12865ms 
 
  
 
  
 Query: NO. 11 
-TIME START 1543963564565 
-Read statement: SELECT * FROM Sailors, Reserves, Boats WHERE Sailors.A = Reserves.G AND Reserves.H = Boats.D AND Sailors.B < 150 
+TIME START 1544065816215 
+Read statement: SELECT DISTINCT * FROM Sailors 
 finish dumping 
 end 
-time spent： 12271ms 
+time spent： 45ms 
 
  
 
  
 Query: NO. 12 
-TIME START 1543963576871 
-Read statement: SELECT DISTINCT * FROM Sailors 
+TIME START 1544065816269 
+Read statement: SELECT * FROM Sailors AS S1, Sailors AS S2 WHERE S1.A < S2.A 
 finish dumping 
 end 
-time spent： 12ms 
+time spent： 9323ms 
 
  
 
  
 Query: NO. 13 
-TIME START 1543963576886 
-Read statement: SELECT * FROM Sailors AS S1, Sailors AS S2 WHERE S1.A < S2.A 
+TIME START 1544065826697 
+Read statement: SELECT B.F, B.D FROM Boats AS B ORDER BY B.D 
 finish dumping 
 end 
-time spent： 7760ms 
+time spent： 138ms 
 
  
 
  
 Query: NO. 14 
-TIME START 1543963585600 
-Read statement: SELECT B.F, B.D FROM Boats AS B ORDER BY B.D 
+TIME START 1544065826839 
+Read statement: SELECT * FROM Sailors AS S, Reserves AS R, Boats AS B WHERE S.A = R.G AND R.H = B.D ORDER BY S.C 
 finish dumping 
 end 
-time spent： 15ms 
+time spent： 2157ms 
 
  
 
  
 Query: NO. 15 
-TIME START 1543963585619 
-Read statement: SELECT * FROM Sailors AS S, Reserves AS R, Boats AS B WHERE S.A = R.G AND R.H = B.D ORDER BY S.C 
-finish dumping 
-end 
-time spent： 638ms 
-
- 
-
- 
-Query: NO. 16 
-TIME START 1543963586310 
+TIME START 1544065829093 
 Read statement: SELECT DISTINCT * FROM Sailors AS S, Reserves AS R, Boats AS B WHERE S.A = R.G AND R.H = B.D ORDER BY S.C 
 finish dumping 
 end 
-time spent： 728ms 
+time spent： 1306ms 

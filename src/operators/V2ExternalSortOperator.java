@@ -1,11 +1,15 @@
 package operators;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import data.Dynamic_properties;
@@ -31,6 +35,7 @@ public class V2ExternalSortOperator extends Operator{
 	private List<String> attrList; // Records the comparing order
 	private int passNum = 0;
 	private int[] mergePointers; //Records the pointers of merge sort
+	volatile List<File> deleteFiles = new LinkedList<File>();
 	//private int outputPointer = 0;
 	public V2ExternalSortOperator(int queryNumber, int bSize, List<String>attributes, Map<String, Integer>schema, Operator op) {
 		this.leftChild = op;
@@ -125,60 +130,25 @@ public class V2ExternalSortOperator extends Operator{
 		}
 		
 		/** After pass 0 */
-		this.scratchFiles = tempDir.listFiles((dir, name) -> !name.equals(".DS_Store")); // 表示当前文件夹存有的所有file.
-		// scratchFiles 作为全局变量，必须改？？
+		this.scratchFiles = tempDir.listFiles((dir, name) -> !name.equals(".DS_Store"));
 		Arrays.sort(this.scratchFiles);
 		passNum = 1;
 		fileNum = 0;
-		// break point of a pass, MOST LIKELY TO PARALLEL COMPUTING IN THE BELOW PHASE	
-		while (scratchFiles.length > 2) { // 因为scratchFiles包括readable file，所以以大于2为分界线！	
-			int fileCountsBeforePass = scratchFiles.length;
-			List<File> deleteFiles = new LinkedList<File>();
+		// break point of a pass, MOST LIKELY TO PARALLEL COMPUTING IN THE BELOW PHASE
+
+		while (scratchFiles.length > 2) { // there are other files including readable files, so > 2 not >= 2！	
 			//Execute a pass
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
-			for (int i = 0; i < scratchFiles.length; i += 2 * (bufferSize - 1)) {  // i到底加多少呢？scratchFiles里面包不包括 _humanreadable呢？可以不包括啊！！
-				TupleReader[] IOkeys = new TupleReader[bufferSize - 1]; // when initialized, every element in TupleReader array is null.
-
-				for (int j = 0; j < IOkeys.length && (i + 2 * j) < scratchFiles.length; j++) {
-					String fileName = scratchFiles[i + 2 * j].getName().replace("_humanreadable", "");
-					int filePassNum = getFilePassNum(fileName);
-					if (filePassNum < passNum) {  // 我真的需要这个判断吗？从scratch file拿出来的难道不是绝对是上一轮的passNum吗？不然我为何还要两个list？
-						deleteFiles.add(new File(getFileAddress(fileName)));
-						deleteFiles.add(new File(getFileAddress(fileName + "_humanreadable")));
-						IOkeys[j] = new TupleReader(getFileAddress(fileName), this.schema); // 最关键：建立好了新的IO接口来读每个page的数据。
-					} 
-				}
-
-				/* update fileNum if other B pages are loaded into buffer and merge for a new file*/
-				fileNum = i / (2 * (bufferSize - 1));
-				String scratchPath = generatePath(fileNum);
-				TupleWriter currPassTpWt = new TupleWriter(scratchPath);
-				
-				/*Construct a local sort buffer to store pages
-				 * Construct a local merge pointer to store the indexes on the pages*/
-				Tuple[] localSortBuffer = new Tuple[(bufferSize - 1) * tuplePerPage];
-				int[] localMergePointers = new int[bufferSize - 1];
-				
-				// load page into local buffer, modify the merge pointers meanwhile.
-				for (int k = 0; k < IOkeys.length; k++) {
-					// load full page content into the kth page via kth tupleReader
-					int loadPageI = readInBuffer(k, IOkeys, localSortBuffer);
-					if (loadPageI == 1) {
-						localMergePointers[k] = k * tuplePerPage; // mergePoints records the starting point of merge
-					}else {
-						localMergePointers[k] = -1;
-					} 
-				}
-				Tuple tuple = mergeSort(localMergePointers, IOkeys, localSortBuffer);
-				while(tuple != null) {
-					currPassTpWt.writeTuple(tuple);
-					tuple = mergeSort(localMergePointers, IOkeys, localSortBuffer);
-				}
-				currPassTpWt.writeTuple(null);
-			}
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////			
+			ExecutorService executor = Executors.newFixedThreadPool(5);
 			
-			//Delete all the files of this last pass
+			// omp parallel for
+			for (int i = 0; i < scratchFiles.length; i += 2 * (bufferSize - 1)) { 
+				OnePassRunnable worker = new OnePassRunnable(fileNum, i);
+	            executor.execute(worker);
+			}
+			executor.shutdown();
+	        // Wait until all threads are finish
+	        executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);		
+	        //Delete all the files of this last pass
 			for (File f: deleteFiles) {
 				f.delete();
 			}			
@@ -191,71 +161,6 @@ public class V2ExternalSortOperator extends Operator{
 		File finalFile = scratchFiles[0];
 		trs[0] = new TupleReader(finalFile.getPath(), this.schema);
 	}
-			
-			
-//			/* For every file in the scratchFiles list, put them into B tuple readers 
-//			 * every time until all of them are all processed. */
-//			int i = 0;//index of scratch files
-//			while(i < fileCountsBeforePass) { // i is  the total num of files which have been processed in the new pass.
-//				//Construct the tuple readers								
-//				int j = 0; // j is the index of tuple readers				
-//				while (j < trs.length) {
-//					//if (j >= scratchFiles.length) break;
-//					String fileName = scratchFiles[i].getName().replace("_humanreadable", "");
-//					int filePassNum = getFilePassNum(fileName);
-//					if (filePassNum < passNum) {
-//						//Delete files of last pass
-//						String fileAddress1 = getFileAddress(fileName);
-//						String fileAddress2 = fileAddress1 + "_humanreadable";
-//						deleteFiles.add(new File(fileAddress1));
-//						deleteFiles.add(new File(fileAddress2));
-//						trs[j] = new TupleReader(fileAddress1, this.schema);
-//						//trsStates[j] = true;
-//						j++;
-//					}
-//					i = i + 2;
-//					if (i >= fileCountsBeforePass) {
-//						while (j < trs.length) {
-//							trs[j] = null;
-//							j++;
-//						}
-//						break;
-//					}
-//				}
-//				
-//				String scratchPath = generatePath(fileNum);
-//				tw = new TupleWriter(scratchPath);
-//				for (int k = 0; k < trs.length; k++) {
-//					// load full page content into the kth page via kth tupleReader
-//					int loadPageI = readInBuffer(k);
-//					if (loadPageI == 1) {
-//						mergePointers[k] = k * tuplePerPage; // mergePoints records the starting point of merge
-//					}else {
-//						mergePointers[k] = -1;
-//					} 
-//				}
-//				Tuple tuple = mergeSort();
-//				int count = 0;
-//				while(tuple != null) {
-//					tw.writeTuple(tuple);
-//					count ++;
-//					tuple = mergeSort();
-//				}
-//				tw.writeTuple(null);
-//				//System.out.println(count);
-//				fileNum++;
-//				//this.scratchFiles = tempDir.listFiles((dir, name) -> !name.equals(".DS_Store"));
-//			}
-//			//Delete all the files of this last pass
-//			for (File f: deleteFiles) {
-//				f.delete();
-//			}
-//			passNum++;
-//			this.scratchFiles = tempDir.listFiles((dir, name) -> !name.equals(".DS_Store"));
-//			Arrays.sort(this.scratchFiles);
-//			fileNum = 0;
-//		}
-//	}
 	
 	/**
 	 * this function is to fill all pages in sortBuffer to be null, and then read all the tuples into the sortBuffer from its left
@@ -474,5 +379,64 @@ public class V2ExternalSortOperator extends Operator{
 		}
 	
 		PhysicalLogger.getLogger().log(Level.SEVERE, path.toString(), new Exception());
+	}
+	
+	public class OnePassRunnable implements Runnable {
+		int fileNum;
+		int i;
+        public OnePassRunnable (int numOfFiles, int index) {
+        	this.fileNum = numOfFiles;
+        	this.i = index;
+        }
+		@Override
+		public void run() {
+			TupleReader[] IOkeys = new TupleReader[bufferSize - 1]; // when initialized, every element in TupleReader array is null.
+			for (int j = 0; j < IOkeys.length && (i + 2 * j) < scratchFiles.length; j++) {
+				
+				String fileName = scratchFiles[i + 2 * j].getName().replace("_humanreadable", "");
+				int filePassNum = getFilePassNum(fileName);
+				
+				if (filePassNum < passNum) { 
+					synchronized (deleteFiles) {
+						deleteFiles.add(new File(getFileAddress(fileName)));
+						deleteFiles.add(new File(getFileAddress(fileName + "_humanreadable")));
+						deleteFiles.notify();
+						
+					}
+					IOkeys[j] = new TupleReader(getFileAddress(fileName), schema); 
+				} 
+			}
+
+			/* update fileNum if other B pages are loaded into buffer and merge for a new file*/
+			fileNum = i / (2 * (bufferSize - 1));
+			String scratchPath = generatePath(fileNum);
+			TupleWriter currPassTpWt = new TupleWriter(scratchPath);
+
+			/*Construct a local sort buffer to store pages
+			 * Construct a local merge pointer to store the indexes on the pages*/
+			Tuple[] localSortBuffer = new Tuple[(bufferSize - 1) * tuplePerPage];
+			int[] localMergePointers = new int[bufferSize - 1];
+			try {
+				// load page into local buffer, modify the merge pointers meanwhile.
+				for (int k = 0; k < IOkeys.length; k++) {
+					// load full page content into the kth page via kth tupleReader
+					int loadPageI = readInBuffer(k, IOkeys, localSortBuffer);
+					if (loadPageI == 1) {
+						localMergePointers[k] = k * tuplePerPage; // mergePoints records the starting point of merge
+					}else {
+						localMergePointers[k] = -1;
+					} 
+				}
+				Tuple tuple = mergeSort(localMergePointers, IOkeys, localSortBuffer);
+				while(tuple != null) {
+					currPassTpWt.writeTuple(tuple);
+					tuple = mergeSort(localMergePointers, IOkeys, localSortBuffer);
+				}
+				currPassTpWt.writeTuple(null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}	
 	}
 }

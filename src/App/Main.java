@@ -10,14 +10,11 @@ package App;
  *
  */
 public class Main {
-
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) {		
 		int queryState = SQLInterpreter.init(args);
 		if (queryState == 1) {
 			SQLInterpreter.statisticsCalculation();
 			SQLInterpreter.BuildQueryPlan();
-		}
-		
+		}		
 	}
 }

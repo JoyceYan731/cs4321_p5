@@ -2,19 +2,6 @@
 
  
 DupElim 
---Project[S.A,R.G] 
----SMJ[S.B = R.G AND S.A = B.D] 
-----ExternalSort[R.G,B.D] 
------BNLJ[R.H <> B.D] 
-------Select[R.H <= 99]
--------TableScan[Reserves] 
-------TableScan[Boats] 
-----ExternalSort[S.B,S.A] 
------TableScan[Sailors] 
-**************************************Physical Plan************************************************ 
-
- 
-DupElim 
 --Project[*] 
 ---TableScan[Sailors] 
 **************************************Physical Plan************************************************ 

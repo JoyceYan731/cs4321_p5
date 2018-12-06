@@ -27,7 +27,6 @@ import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.SelectItem;
 import operators.BNLJoinOperator;
 import operators.DuplicateEliminationOperator;
-import operators.ExternalSortOperator;
 import operators.InMemSortOperator;
 import operators.IndexScanOperator;
 import operators.JoinOperator;
