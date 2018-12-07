@@ -1,3 +1,0 @@
-src/samples/input
-src/samples/output
-src/samples/temp

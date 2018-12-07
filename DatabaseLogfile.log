@@ -3,148 +3,198 @@
 
  
 Query: NO. 1 
-TIME START 1544065799840 
-Read statement: SELECT * FROM Sailors 
+TIME START 1544142388428 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND C.CV > 37 AND D.DV >= 4 AND S.SV <> 1 AND P.PV < 7 
 finish dumping 
 end 
-time spent： 659ms 
+time spent： 1907ms 
 
  
 
  
 Query: NO. 2 
-TIME START 1544065800511 
-Read statement: SELECT Sailors.A FROM Sailors 
+TIME START 1544142390386 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV <= 37 AND S.SV <= 42 AND C.CV = 14 AND P.PV >= 32 
 finish dumping 
 end 
-time spent： 41ms 
+time spent： 618ms 
 
  
 
  
 Query: NO. 3 
-TIME START 1544065800557 
-Read statement: SELECT Boats.F, Boats.D FROM Boats 
+TIME START 1544142391013 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND S.SV > 8 AND C.CV < 19 AND D.DV = 11 AND P.PV <> 13 
 finish dumping 
 end 
-time spent： 37ms 
+time spent： 1812ms 
 
  
 
  
 Query: NO. 4 
-TIME START 1544065800618 
-Read statement: SELECT Reserves.G, Reserves.H FROM Reserves 
+TIME START 1544142392833 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV <> 23 AND C.CV <> 28 AND S.SV >= 45 AND P.PV >= 3 
 finish dumping 
 end 
-time spent： 39ms 
+time spent： 1921ms 
 
  
 
  
 Query: NO. 5 
-TIME START 1544065800670 
-Read statement: SELECT * FROM Sailors WHERE Sailors.B >= Sailors.C 
+TIME START 1544142394777 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND S.SV <= 34 AND P.PV = 32 AND D.DV <> 44 AND C.CV = 16 
 finish dumping 
 end 
-time spent： 64ms 
+time spent： 428ms 
 
  
 
  
 Query: NO. 6 
-TIME START 1544065800743 
-Read statement: SELECT Sailors.A FROM Sailors WHERE Sailors.B >= Sailors.C 
+TIME START 1544142395220 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV = 48 AND P.PV > 3 AND S.SV <> 37 AND C.CV <= 17 
 finish dumping 
 end 
-time spent： 62ms 
+time spent： 1316ms 
 
  
 
  
 Query: NO. 7 
-TIME START 1544065800815 
-Read statement: SELECT Sailors.A FROM Sailors WHERE Sailors.B >= Sailors.C AND Sailors.B < Sailors.C 
+TIME START 1544142396540 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV = 43 AND C.CV <> 34 AND S.SV > 24 AND P.PV > 23 
 finish dumping 
 end 
-time spent： 133ms 
+time spent： 1124ms 
 
  
 
  
 Query: NO. 8 
-TIME START 1544065800952 
-Read statement: SELECT * FROM Sailors, Reserves WHERE Sailors.A = Reserves.G 
+TIME START 1544142397672 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV <> 12 AND P.PV <> 21 AND C.CV >= 47 AND S.SV <> 7 
 finish dumping 
 end 
-time spent： 346ms 
+time spent： 1055ms 
 
  
 
  
 Query: NO. 9 
-TIME START 1544065801322 
-Read statement: SELECT * FROM Sailors, Reserves, Boats WHERE Sailors.A = Reserves.G AND Reserves.H = Boats.D 
+TIME START 1544142398755 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND S.SV < 25 AND C.CV = 48 AND D.DV > 10 AND P.PV = 38 
 finish dumping 
 end 
-time spent： 1722ms 
+time spent： 566ms 
 
  
 
  
 Query: NO. 10 
-TIME START 1544065803289 
-Read statement: SELECT * FROM Sailors, Reserves, Boats WHERE Sailors.A = Reserves.G AND Reserves.H = Boats.D AND Sailors.B < 150 
+TIME START 1544142399324 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND P.PV < 47 AND D.DV = 18 AND S.SV <= 50 AND C.CV <> 41 
 finish dumping 
 end 
-time spent： 12865ms 
+time spent： 1282ms 
 
  
 
  
 Query: NO. 11 
-TIME START 1544065816215 
-Read statement: SELECT DISTINCT * FROM Sailors 
+TIME START 1544142400622 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND S.SV <= 13 AND P.PV < 46 AND C.CV <> 21 AND D.DV < 27 
 finish dumping 
 end 
-time spent： 45ms 
+time spent： 1760ms 
 
  
 
  
 Query: NO. 12 
-TIME START 1544065816269 
-Read statement: SELECT * FROM Sailors AS S1, Sailors AS S2 WHERE S1.A < S2.A 
+TIME START 1544142402478 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV < 43 AND C.CV = 12 AND P.PV = 31 AND S.SV < 16 
 finish dumping 
 end 
-time spent： 9323ms 
+time spent： 421ms 
 
  
 
  
 Query: NO. 13 
-TIME START 1544065826697 
-Read statement: SELECT B.F, B.D FROM Boats AS B ORDER BY B.D 
+TIME START 1544142402903 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND C.CV < 44 AND P.PV > 15 AND D.DV <> 49 AND S.SV < 20 
 finish dumping 
 end 
-time spent： 138ms 
+time spent： 1577ms 
 
  
 
  
 Query: NO. 14 
-TIME START 1544065826839 
-Read statement: SELECT * FROM Sailors AS S, Reserves AS R, Boats AS B WHERE S.A = R.G AND R.H = B.D ORDER BY S.C 
+TIME START 1544142404516 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV = 13 AND P.PV <> 37 AND S.SV >= 26 AND C.CV <> 33 
 finish dumping 
 end 
-time spent： 2157ms 
+time spent： 853ms 
 
  
 
  
 Query: NO. 15 
-TIME START 1544065829093 
-Read statement: SELECT DISTINCT * FROM Sailors AS S, Reserves AS R, Boats AS B WHERE S.A = R.G AND R.H = B.D ORDER BY S.C 
+TIME START 1544142405373 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND P.PV <> 20 AND C.CV < 21 AND S.SV <= 46 AND D.DV = 8 
 finish dumping 
 end 
-time spent： 1306ms 
+time spent： 1246ms 
+
+ 
+
+ 
+Query: NO. 16 
+TIME START 1544142406657 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND S.SV <> 11 AND C.CV >= 12 AND D.DV >= 3 AND P.PV < 8 
+finish dumping 
+end 
+time spent： 707ms 
+
+ 
+
+ 
+Query: NO. 17 
+TIME START 1544142407372 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV < 34 AND S.SV < 48 AND P.PV <= 12 AND C.CV <> 14 
+finish dumping 
+end 
+time spent： 1395ms 
+
+ 
+
+ 
+Query: NO. 18 
+TIME START 1544142408804 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND S.SV >= 3 AND C.CV < 21 AND D.DV >= 39 AND P.PV >= 2 
+finish dumping 
+end 
+time spent： 1373ms 
+
+ 
+
+ 
+Query: NO. 19 
+TIME START 1544142410186 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND D.DV = 12 AND C.CV < 27 AND P.PV > 33 AND S.SV < 38 
+finish dumping 
+end 
+time spent： 505ms 
+
+ 
+
+ 
+Query: NO. 20 
+TIME START 1544142410696 
+Read statement: SELECT * FROM LINEORDER AS L, CUSTOMER AS C, PART AS P, SUPPLIER AS S, DATE AS D WHERE L.CKEY = C.CKEY AND L.PKEY = P.PKEY AND L.SKEY = S.SKEY AND L.DKEY = D.DKEY AND S.SV > 11 AND D.DV <= 8 AND C.CV <> 1 AND P.PV = 36 
+finish dumping 
+end 
+time spent： 241ms 

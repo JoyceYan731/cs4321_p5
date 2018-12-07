@@ -19,6 +19,13 @@ import util.PhysicalLogger;
 import util.TupleReader;
 import util.TupleWriter;
 
+/**
+ * This class is used to do the external sort.
+ * The format of temporary scratch file naming: aliase_column_passNum_fileNum_queryNum
+ * @author Yixuan Jiang, Ruoxuan Xu
+ *
+ */
+
 public class V2ExternalSortOperator extends Operator{
 	private int queryNum;
 	private String tempAddress;
@@ -138,7 +145,7 @@ public class V2ExternalSortOperator extends Operator{
 
 		while (scratchFiles.length > 2) { // there are other files including readable files, so > 2 not >= 2！	
 			//Execute a pass
-			ExecutorService executor = Executors.newFixedThreadPool(5);
+			ExecutorService executor = Executors.newFixedThreadPool(6);
 			
 			// omp parallel for
 			for (int i = 0; i < scratchFiles.length; i += 2 * (bufferSize - 1)) { 

@@ -1,0 +1,541 @@
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[S.SV <> 1]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[P.PV,], equals null, min null, max 6]
+[[C.CV,], equals null, min 38, max null]
+[[D.DV,], equals null, min 4, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV >= 38]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <= 6]
+-----Leaf[PART] 
+----Select[S.SV <> 1]
+-----Leaf[SUPPLIER] 
+----Select[D.DV >= 4]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join
+[[D.DV,], equals null, min null, max 37]
+[[P.PV,], equals null, min 32, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[S.SV,], equals null, min null, max 42]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[C.CV,], equals 14, min 14, max 14]
+[[L.PKEY, P.PKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV = 14]
+-----Leaf[CUSTOMER] 
+----Select[P.PV >= 32]
+-----Leaf[PART] 
+----Select[S.SV <= 42]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <= 37]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[P.PV <> 13]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[C.CV,], equals null, min null, max 18]
+[[S.SV,], equals null, min 9, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[D.DV,], equals 11, min 11, max 11]
+[[L.SKEY, S.SKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV <= 18]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <> 13]
+-----Leaf[PART] 
+----Select[S.SV >= 9]
+-----Leaf[SUPPLIER] 
+----Select[D.DV = 11]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[D.DV <> 23 AND C.CV <> 28]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[S.SV,], equals null, min 45, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[P.PV,], equals null, min 3, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV <> 28]
+-----Leaf[CUSTOMER] 
+----Select[P.PV >= 3]
+-----Leaf[PART] 
+----Select[S.SV >= 45]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <> 23]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[D.DV <> 44]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[C.CV,], equals 16, min 16, max 16]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[S.SV,], equals null, min null, max 34]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[P.PV,], equals 32, min 32, max 32] 
+----Leaf[LINEORDER] 
+----Select[C.CV = 16]
+-----Leaf[CUSTOMER] 
+----Select[P.PV = 32]
+-----Leaf[PART] 
+----Select[S.SV <= 34]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <> 44]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[S.SV <> 37]
+[[P.PV,], equals null, min 4, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[D.DV,], equals 48, min 48, max 48]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[C.CV,], equals null, min null, max 17] 
+----Leaf[LINEORDER] 
+----Select[C.CV <= 17]
+-----Leaf[CUSTOMER] 
+----Select[P.PV >= 4]
+-----Leaf[PART] 
+----Select[S.SV <> 37]
+-----Leaf[SUPPLIER] 
+----Select[D.DV = 48]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[C.CV <> 34]
+[[P.PV,], equals null, min 24, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[D.DV,], equals 43, min 43, max 43]
+[[S.SV,], equals null, min 25, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV <> 34]
+-----Leaf[CUSTOMER] 
+----Select[P.PV >= 24]
+-----Leaf[PART] 
+----Select[S.SV >= 25]
+-----Leaf[SUPPLIER] 
+----Select[D.DV = 43]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[D.DV <> 12 AND P.PV <> 21 AND S.SV <> 7]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[C.CV,], equals null, min 47, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV >= 47]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <> 21]
+-----Leaf[PART] 
+----Select[S.SV <> 7]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <> 12]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join
+[[P.PV,], equals 38, min 38, max 38]
+[[S.SV,], equals null, min null, max 24]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[D.DV,], equals null, min 11, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[C.CV,], equals 48, min 48, max 48]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV = 48]
+-----Leaf[CUSTOMER] 
+----Select[P.PV = 38]
+-----Leaf[PART] 
+----Select[S.SV <= 24]
+-----Leaf[SUPPLIER] 
+----Select[D.DV >= 11]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[C.CV <> 41]
+[[D.DV,], equals 18, min 18, max 18]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[S.SV,], equals null, min null, max 50]
+[[P.PV,], equals null, min null, max 46]
+[[L.SKEY, S.SKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV <> 41]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <= 46]
+-----Leaf[PART] 
+----Select[S.SV <= 50]
+-----Leaf[SUPPLIER] 
+----Select[D.DV = 18]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[C.CV <> 21]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[S.SV,], equals null, min null, max 13]
+[[P.PV,], equals null, min null, max 45]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[D.DV,], equals null, min null, max 26] 
+----Leaf[LINEORDER] 
+----Select[C.CV <> 21]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <= 45]
+-----Leaf[PART] 
+----Select[S.SV <= 13]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <= 26]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join
+[[D.DV,], equals null, min null, max 42]
+[[P.PV,], equals 31, min 31, max 31]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[C.CV,], equals 12, min 12, max 12]
+[[S.SV,], equals null, min null, max 15]
+[[L.SKEY, S.SKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV = 12]
+-----Leaf[CUSTOMER] 
+----Select[P.PV = 31]
+-----Leaf[PART] 
+----Select[S.SV <= 15]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <= 42]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[D.DV <> 49]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[C.CV,], equals null, min null, max 43]
+[[P.PV,], equals null, min 16, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[S.SV,], equals null, min null, max 19] 
+----Leaf[LINEORDER] 
+----Select[C.CV <= 43]
+-----Leaf[CUSTOMER] 
+----Select[P.PV >= 16]
+-----Leaf[PART] 
+----Select[S.SV <= 19]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <> 49]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[P.PV <> 37 AND C.CV <> 33]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[D.DV,], equals 13, min 13, max 13]
+[[S.SV,], equals null, min 26, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV <> 33]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <> 37]
+-----Leaf[PART] 
+----Select[S.SV >= 26]
+-----Leaf[SUPPLIER] 
+----Select[D.DV = 13]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[P.PV <> 20]
+[[S.SV,], equals null, min null, max 46]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[D.DV,], equals 8, min 8, max 8]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[C.CV,], equals null, min null, max 20] 
+----Leaf[LINEORDER] 
+----Select[C.CV <= 20]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <> 20]
+-----Leaf[PART] 
+----Select[S.SV <= 46]
+-----Leaf[SUPPLIER] 
+----Select[D.DV = 8]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[S.SV <> 11]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[D.DV,], equals null, min 3, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[P.PV,], equals null, min null, max 7]
+[[C.CV,], equals null, min 12, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV >= 12]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <= 7]
+-----Leaf[PART] 
+----Select[S.SV <> 11]
+-----Leaf[SUPPLIER] 
+----Select[D.DV >= 3]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[C.CV <> 14]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[D.DV,], equals null, min null, max 33]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[P.PV,], equals null, min null, max 12]
+[[S.SV,], equals null, min null, max 47] 
+----Leaf[LINEORDER] 
+----Select[C.CV <> 14]
+-----Leaf[CUSTOMER] 
+----Select[P.PV <= 12]
+-----Leaf[PART] 
+----Select[S.SV <= 47]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <= 33]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[P.PV,], equals null, min 2, max null]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[D.DV,], equals null, min 39, max null]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[S.SV,], equals null, min 3, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[C.CV,], equals null, min null, max 20] 
+----Leaf[LINEORDER] 
+----Select[C.CV <= 20]
+-----Leaf[CUSTOMER] 
+----Select[P.PV >= 2]
+-----Leaf[PART] 
+----Select[S.SV >= 3]
+-----Leaf[SUPPLIER] 
+----Select[D.DV >= 39]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join
+[[L.DKEY, D.DKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[P.PV,], equals null, min 34, max null]
+[[S.SV,], equals null, min null, max 37]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[C.CV,], equals null, min null, max 26]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[D.DV,], equals 12, min 12, max 12] 
+----Leaf[LINEORDER] 
+----Select[C.CV <= 26]
+-----Leaf[CUSTOMER] 
+----Select[P.PV >= 34]
+-----Leaf[PART] 
+----Select[S.SV <= 37]
+-----Leaf[SUPPLIER] 
+----Select[D.DV = 12]
+-----Leaf[DATE] 
+
+ 
+
+ 
+**************************************Query************************************************ 
+
+ 
+DupElim 
+-Sort[] 
+--Project[*] 
+---Join[C.CV <> 1]
+[[L.SKEY, S.SKEY,], equals null, min null, max null]
+[[L.PKEY, P.PKEY,], equals null, min null, max null]
+[[D.DV,], equals null, min null, max 8]
+[[P.PV,], equals 36, min 36, max 36]
+[[L.CKEY, C.CKEY,], equals null, min null, max null]
+[[S.SV,], equals null, min 12, max null]
+[[L.DKEY, D.DKEY,], equals null, min null, max null] 
+----Leaf[LINEORDER] 
+----Select[C.CV <> 1]
+-----Leaf[CUSTOMER] 
+----Select[P.PV = 36]
+-----Leaf[PART] 
+----Select[S.SV >= 12]
+-----Leaf[SUPPLIER] 
+----Select[D.DV <= 8]
+-----Leaf[DATE] 
+
+ 
+
+ 

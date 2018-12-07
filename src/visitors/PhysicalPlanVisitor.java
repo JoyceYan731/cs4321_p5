@@ -11,9 +11,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
+import data.DataBase;
 import data.Dynamic_properties;
 import data.TablePair;
+import data.TableStat;
 import data.UfCollection;
+import data.UfElement;
 import logicalOperators.LogicalDuplicateEliminationOperator;
 import logicalOperators.LogicalJoinOperator;
 import logicalOperators.LogicalOperator;
@@ -27,6 +30,7 @@ import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.SelectItem;
 import operators.BNLJoinOperator;
 import operators.DuplicateEliminationOperator;
+import operators.HashJoinOperator;
 import operators.InMemSortOperator;
 import operators.IndexScanOperator;
 import operators.JoinOperator;
@@ -51,9 +55,10 @@ public class PhysicalPlanVisitor {
 	private LinkedList<String> tableNames;//Store names of joined tables 
 	private LinkedList<String> tableAliases;//Store aliases of joined tables
 	private Map<String, Integer> outputSizeMap;//Store the output size after selection (in tuples)
+	private Map<String, Map<String, Long>> vMap;
 	private int queryNum;
 	//private int joinType=0; // 0: TNLJ, 1: BNLJ, 2: SMJ
-	private int sortType=0; // 0: in-memory, 1: external
+	private int sortType = 0; // 0: in-memory, 1: external
 	//private int indexState=0; // 0: full-scan, 1: use indexes 
 	private int bnljBufferSize = 5;//use 5 pages for BNLJ
 	private int exSortBufferSize = 6;//use 6 pages for external sort
@@ -67,6 +72,7 @@ public class PhysicalPlanVisitor {
 		this.tableAliases = new LinkedList<String>();
 		this.tableNames = new LinkedList<String>();
 		this.outputSizeMap = new HashMap<String, Integer>();
+		this.vMap = new HashMap<String, Map<String, Long>>();
 		this.queryNum = qN;
 		this.ufc = u;
 	}
@@ -91,11 +97,38 @@ public class PhysicalPlanVisitor {
 	public void visit(LogicalScanOperator scOp) {
 		String tableName = scOp.getTableName();
 		String tableAliase = scOp.getTableAliase();
+		Map<String, TableStat> statistics = DataBase.getInstance().getStatistics();
+		
+		TableStat tableStatistics = statistics.get(tableName);
+		List<Long> lBounds = tableStatistics.lowerBound;
+		List<Long> uBounds = tableStatistics.upperBound;
+		Map<String, Long> currVMap = new HashMap<String, Long>();
+		Map<String, UfElement> ufcMap = ufc.getMap();
+		
 		Expression expression = scOp.getCondition();
 		SelectDeterminator sd = new SelectDeterminator(scOp, this.ufc);
 		String selectColumn = sd.selectColumn();
 		boolean clustered = sd.checkClustered(selectColumn);
 		int output = sd.computeOutputSize();
+		
+		for (int i = 0; i < scOp.getAttributes().size(); i ++) {
+			String attr = scOp.getAttributes().get(i);
+			StringBuilder k = new StringBuilder();
+			k.append(tableAliase);
+			k.append(".");
+			k.append(attr);
+			UfElement uEle = ufcMap.get(k.toString());
+			Long lower = (uEle == null || uEle.getLowerBound() == null) ? lBounds.get(i) : uEle.getLowerBound();
+			Long upper = (uEle == null || uEle.getUpperBound() == null) ? uBounds.get(i) : uEle.getUpperBound();
+			long v = Math.min(upper-lower+1, output);
+			StringBuilder key = new StringBuilder();
+			key.append(tableAliase);
+			key.append(".");
+			key.append(attr);
+			currVMap.put(key.toString(), v);
+		}
+		
+		
 		if(selectColumn != null) {
 			IndexExpressionVisitor indVisitor = new IndexExpressionVisitor(scOp, selectColumn);
 			indVisitor.Classify();
@@ -111,6 +144,7 @@ public class PhysicalPlanVisitor {
 			tableNames.add(tableName);
 			tableAliases.add(tableAliase);
 			outputSizeMap.put(tableAliase, output);
+			vMap.put(tableAliase, currVMap);
 			root = scan;
 		}else {
 			ScanOperator scan = new ScanOperator(tableName, tableAliase, expression);
@@ -118,6 +152,7 @@ public class PhysicalPlanVisitor {
 			tableNames.add(tableName);
 			tableAliases.add(tableAliase);
 			outputSizeMap.put(tableAliase, output);
+			vMap.put(tableAliase, currVMap);
 			root = scan;
 		}
 		
@@ -138,7 +173,7 @@ public class PhysicalPlanVisitor {
 		}
 		
 		//Determine the join order
-		JoinOrderDeterminator jd = new JoinOrderDeterminator(this.tableNames, this.tableAliases, this.outputSizeMap, this.ufc);
+		JoinOrderDeterminator jd = new JoinOrderDeterminator(this.tableNames, this.tableAliases, this.outputSizeMap, this.ufc, this.vMap);
 		List<Integer> joinOrder = jd.getOrder();
 		LinkedList<Operator> tempChildList = new LinkedList<Operator>();
 		Set<String> tempAllTable = new HashSet<String>();
@@ -169,8 +204,8 @@ public class PhysicalPlanVisitor {
 		}else {
 			tempChildList.add(childList.pollLast());
 		}
-		
-		for (int i = 0; i < childList.size(); i++) {
+		int size = childList.size();
+		for (int i = 0; i < size; i++) {
 			childList.remove();
 		}
 		Operator join= tempChildList.pollLast();
@@ -210,18 +245,21 @@ public class PhysicalPlanVisitor {
 		}
 		expr.accept(eev);
 		if (eev.isEqal()) {
-			SMJoinOperator join = new SMJoinOperator(left, right, expr);
-			if (left != null) {
-				Operator originalLeft = left;
-				//left = new ExternalSortOperator(queryNum, exSortBufferSize, join3.getLeftSortColumns(), originalLeft.getSchema(), originalLeft);
-				left = new V2ExternalSortOperator(queryNum, exSortBufferSize, join.getLeftSortColumns(), originalLeft.getSchema(), originalLeft);
-			}
-			if (right != null) {
-				Operator originalRight = right;
-				//right = new ExternalSortOperator(queryNum, exSortBufferSize, join3.getRightSortColumns(), originalRight.getSchema(), originalRight);
-				right = new V2ExternalSortOperator(queryNum, exSortBufferSize, join.getRightSortColumns(), originalRight.getSchema(), originalRight);		
-
-			}
+			Operator join = new HashJoinOperator(left, right, expr);
+//			Operator join = new SMJJoinOperator(left, right, expr);
+//			if (left != null) {
+//				Operator originalLeft = left;
+//				//left = new ExternalSortOperator(queryNum, exSortBufferSize, join3.getLeftSortColumns(), originalLeft.getSchema(), originalLeft);
+//				left = new V2ExternalSortOperator(queryNum, exSortBufferSize, join.getLeftSortColumns(), originalLeft.getSchema(), originalLeft);
+//			}
+//			if (right != null) {
+//				Operator originalRight = right;
+//				//right = new ExternalSortOperator(queryNum, exSortBufferSize, join3.getRightSortColumns(), originalRight.getSchema(), originalRight);
+//				right = new V2ExternalSortOperator(queryNum, exSortBufferSize, join.getRightSortColumns(), originalRight.getSchema(), originalRight);		
+//
+//			}
+			
+		
 			join.setLeftChild(left);
 			join.setRightChild(right);
 			return join;

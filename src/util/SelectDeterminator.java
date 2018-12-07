@@ -69,7 +69,7 @@ public class SelectDeterminator {
 				UfElement uEle = ufMap.get(key);
 				long lBound2 = (uEle.getLowerBound()==null) ? lBound : uEle.getLowerBound();
 				long uBound2 = (uEle.getUpperBound()==null) ? uBound : uEle.getUpperBound();
-				float reFactor = (uBound2-lBound2)/(uBound-lBound);
+				float reFactor = (uBound2-lBound2+1f)/(uBound-lBound+1f);
 				redMap.put(key, reFactor);
 			}else {
 				float reFactor = (float)1.0;
